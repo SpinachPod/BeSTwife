@@ -54,6 +54,7 @@ struct BstNode* bst_insert(struct BstNode* root, char value[64]) {
 if (root == NULL) return NULL;
 
 int cmp = strcmp(value, root->value);
+if (cmp == 0) return NULL;
 if (cmp < 0 && root->left == NULL) {
   root->left = new_bst_node(value, root);
   return root;
@@ -65,7 +66,6 @@ if (cmp > 0 && root->right == NULL) {
 
 if (cmp < 0 && root->left != NULL) return bst_insert(root->left, value);
 if (cmp > 0 && root->right != NULL) return bst_insert(root->right, value);
-if (cmp == 0) return root;
 
 return NULL;
 }
