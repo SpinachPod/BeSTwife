@@ -14,9 +14,10 @@ struct BstNode {
 struct Bst {
    struct BstNode* root_node;
    int size;
+   int string_length;
 };
 
-struct Bst* new_bst(char value[64]) {
+struct Bst* new_bst(int len, char value[static len]) {
   struct Bst* bst = malloc(sizeof(struct Bst));
   if (bst == NULL) return NULL;
   
@@ -26,20 +27,21 @@ struct Bst* new_bst(char value[64]) {
     return NULL;
   }
 
-  strncpy(bst->root_node->value, value, 63);
-  bst->root_node->value[63] = '\0';
+  strncpy(bst->root_node->value, value, len);
+  bst->string_length = len;
+  bst->size = 1;
+  bst->root_node->value[len] = '\0';
   bst->root_node->left = NULL;
   bst->root_node->right = NULL;
   bst->root_node->parent = NULL;
   bst->root_node->root = bst;
-  bst->size = 1;
   return bst;
 }
 
-struct BstNode* new_bst_node(char value[64], struct BstNode* parent) {
+struct BstNode* new_bst_node(char value[], struct BstNode* parent) {
     struct BstNode* node = malloc(sizeof(struct BstNode));
-    strncpy(node->value, value, 63);
-    node->value[63] = '\0';
+    strncpy(node->value, value, parent->root->string_length);
+    node->value[parent->root->string_length] = '\0';
     node->left = NULL;
     node->right = NULL;
     node->parent = parent;
@@ -49,7 +51,7 @@ struct BstNode* new_bst_node(char value[64], struct BstNode* parent) {
 }
 
 
-struct BstNode* bst_insert(struct BstNode* root, char value[64]) {   
+struct BstNode* bst_insert(struct BstNode* root, char value[]) {   
 
 if (root == NULL) return NULL;
 
@@ -70,7 +72,7 @@ if (cmp > 0 && root->right != NULL) return bst_insert(root->right, value);
 return NULL;
 }
 
-struct BstNode* bst_search(struct BstNode* node, char value[64]) {
+struct BstNode* bst_search(struct BstNode* node, char value[]) {
   if (node == NULL) return NULL;
   
   int cmp = strcmp(value, node->value);
@@ -83,7 +85,7 @@ int main() {
   char name[64];
   printf("uhh whats your name so i know who im adding the wives for?\n");
   scanf("%s", name);
-  struct Bst* bst = new_bst(name);
+  struct Bst* bst = new_bst(64, name);
   while (true) {
     char instruction[8];
     char input[64];
